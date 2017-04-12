@@ -1,2 +1,5 @@
 # GoProDashboard
-A NodeJS webapp to interface with GoPro cameras over wifi. 
+
+A Python webapp to interface with GoPro cameras over wifi. 
+
+Currently supports viewing media 

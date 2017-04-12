@@ -1,0 +1,48 @@
+
+<html>
+<head>
+<title>GoPro Web Interface</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="static/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <p class="navbar-text">GoPro Web Interface</p>
+    <button type="button" class="btn btn-default navbar-btn" id="control">Control</button>
+    <button type="button" class="btn btn-default navbar-btn" id="preview">Preview</button>
+    <button type="button" class="btn btn-default navbar-btn" id="media">Media</button>
+</nav>
+
+<button type="button" class="btn btn-primary">Shutter</button>
+	<table>
+  <tr>
+  {% for result in searchResults %}
+      
+		<td><img src="{{result.purl}}"</td>
+      
+  {% endfor %}
+</tr>
+<tr>
+  {% for result in searchResults %}
+      
+		<td>{{result.dur}}</td>
+      
+  {% endfor %}
+</tr>
+<tr>
+  {% for result in searchResults %}
+      
+		<td>{{result.filename}}</td>
+      
+  {% endfor %}
+</tr>
+<tr>
+  {% for result in searchResults %}
+      
+		<td>Download: <a href="http://10.5.5.9:8080/videos/DCIM/{{result.folder}}/{{result.filename}}">File</a></td>
+      
+  {% endfor %}
+</tr>
+</table>
+</body>
+</html>
