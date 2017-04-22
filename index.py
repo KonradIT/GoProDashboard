@@ -1,12 +1,13 @@
 from flask import Flask, render_template, jsonify
+from flask import request
 from goprocam import GoProCamera, constants
 
 app = Flask(__name__)
 gopro = GoProCamera.GoPro()
 
-gopro_media=gopro.listMedia(True, True)
-def format_media(media):
+def format_media():
     data = []
+    media=gopro.listMedia(True, True)
     for m in media:
         duration=gopro.parse_value("media_size",int(m[2]))
         if m[1].endswith(".MP4"):
@@ -27,8 +28,12 @@ def gp_info():
 	return info
 @app.route('/')
 def media():
-    searchResults = format_media(gopro_media)
+    searchResults = format_media()
     return render_template('index.html', searchResults=searchResults,goproinfo=gp_info())
 
+@app.route('/delete')
+def delete_media():
+	gopro.deleteFile(request.args.get('folder'),request.args.get('filename'))
+	return media()
 if __name__ == '__main__':
     app.run(debug=True)

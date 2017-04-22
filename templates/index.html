@@ -15,12 +15,19 @@
 		left: 0;
 		visibility: hidden;
 	}
+	table{
+		table-layout: fixed;
+	}
+	td{
+		width: 10%;
+	}
 </style>
 <script>
 function display(src){
 	document.getElementById("display_media").style.visibility = "visible";
 	document.getElementById("display_media").src = src;
 }
+
 </script>
 </head>
 <body>
@@ -58,7 +65,7 @@ function display(src){
 <tr>
   {% for result in searchResults %}
       
-		<td><a href="http://10.5.5.9:8080/videos/DCIM/{{result.folder}}/{{result.filename}}">Download</a> | <a href="#" onclick="display('http://10.5.5.9:8080/videos/DCIM/{{result.folder}}/{{result.filename}}')">Display</a></td>
+		<td><a href="http://10.5.5.9:8080/videos/DCIM/{{result.folder}}/{{result.filename}}">Download</a> | <a onclick="display('http://10.5.5.9:8080/videos/DCIM/{{result.folder}}/{{result.filename}}')">Display</a> | <a href="/delete?folder={{result.folder}}&filename={{result.filename}}">Delete</a></td>
       
   {% endfor %}
 </tr>
