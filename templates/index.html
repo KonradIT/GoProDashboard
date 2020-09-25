@@ -1,75 +1,71 @@
-
 <html>
+
 <head>
-<title>GoPro Web Interface</title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="static/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<style>
-	body {
-		background-color: black;
-		color: white;
-	}
-	#display_media{
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		visibility: hidden;
-	}
-	table{
-		table-layout: fixed;
-	}
-	td{
-		width: 10%;
-	}
-</style>
-<script>
-function display(src){
-	document.getElementById("display_media").style.visibility = "visible";
-	document.getElementById("display_media").src = src;
-}
+	<title>GoPro Web Interface</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="static/css/bootstrap.min.css"
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<style>
+		body {
+			background-color: black;
+			color: white;
+		}
 
-</script>
+		#display_media {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			visibility: hidden;
+		}
+
+		.grid-container {
+			display: grid;
+			grid-template-columns: auto auto auto auto auto auto auto auto auto;
+			background-color: black;
+			padding: 30px;
+		}
+
+		.grid-item {
+			background-color: rgba(255, 255, 255, 0.8);
+			border: 1px solid rgba(0, 0, 0, 0.8);
+			text-align: center;
+		}
+	</style>
+	<script>
+		function display(src) {
+			document.getElementById("display_media").style.visibility = "visible";
+			document.getElementById("display_media").src = src;
+		}
+
+	</script>
 </head>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <p class="navbar-text">GoPro Web Interface</p>
-    <button type="button" class="btn btn-default navbar-btn" id="control">Control</button>
-    <button type="button" class="btn btn-default navbar-btn" id="preview">Preview</button>
-    <button type="button" class="btn btn-default navbar-btn" id="media">Media</button>
-	<b id="camera_name">{{goproinfo}}</b>
-</nav>
 
-<button type="button" class="btn btn-primary">Shutter</button>
-	<table>
-  <tr>
-  {% for result in searchResults %}
-      
-		<td><img src="{{result.purl}}"</td>
-      
-  {% endfor %}
-</tr>
-<tr>
-  {% for result in searchResults %}
-      
-		<td>{{result.dur}}</td>
-      
-  {% endfor %}
-</tr>
-<tr>
-  {% for result in searchResults %}
-      
-		<td>{{result.filename}}</td>
-      
-  {% endfor %}
-</tr>
-<tr>
-  {% for result in searchResults %}
-      
-		<td><a href="http://10.5.5.9:8080/videos/DCIM/{{result.folder}}/{{result.filename}}">Download</a> | <a onclick="display('http://10.5.5.9:8080/videos/DCIM/{{result.folder}}/{{result.filename}}')">Display</a> | <a href="/delete?folder={{result.folder}}&filename={{result.filename}}">Delete</a></td>
-      
-  {% endfor %}
-</tr>
-</table>
-<iframe width="50%" height="60%" id="display_media" >
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<p class="navbar-text">GoPro Web Interface</p>
+		<button type="button" class="btn btn-default navbar-btn" id="control">Control</button>
+		<button type="button" class="btn btn-default navbar-btn" id="preview">Preview</button>
+		<button type="button" class="btn btn-default navbar-btn" id="media">Media</button>
+		<b id="camera_name">{{goproinfo}}</b>
+	</nav>
+
+	<button type="button" class="btn btn-primary">Shutter</button>
+	<div class="grid-container">
+		{% for result in searchResults %}
+		<div class="grid-item">
+			<img src="http://172.28.151.51/gp/gpMediaMetadata?p={{result[0]}}/{{result[1]}}" />
+			<br>
+			<b>{{result[0]}}</b>
+			<br>
+			<b>{{result[1]}}</b>
+			<br><a href="http://10.5.5.9:8080/videos/DCIM/{{result[0]}}/{{result[1]}}">Download</a> | <a
+				onclick="display('http://10.5.5.9:8080/videos/DCIM/{{result[0]}}/{{result[1]}}')">Display</a>
+		</div>
+
+		{% endfor %}
+
+	</div>
+	<iframe width="50%" height="60%" id="display_media">
 </body>
+
 </html>
