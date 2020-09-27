@@ -1,0 +1,23 @@
+#!/bin/sh -e
+
+IF=$1
+STATUS=$2
+
+case "$IF" in 
+  *enp0s20*)
+    # Do stuff
+
+    case "$STATUS" in
+        up)
+
+        	DISPLAY=:0 /usr/bin/notify-send "GoPro Webcam Activated" $(ifconfig $IF | grep "inet " | awk '{print $2}')
+        	/usr/bin/python /home/konrad/GitHub/GoproDashboard/index.py
+        ;;
+        down)
+        	DISPLAY=:0 /usr/bin/notify-send "GoPro Webcam Deactivated"
+        ;;
+        *)
+        ;;
+    esac
+    ;;
+esac
