@@ -76,6 +76,14 @@
 			})
 		}
 
+		function webcam(enable) {
+			if (enable) {
+				fetch("/webcam/start")
+			} else {
+				fetch("/webcam/stop")
+			}
+		}
+
 	</script>
 
 </head>
@@ -83,10 +91,14 @@
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<p class="navbar-text">GoPro Web Interface</p>
-		<button type="button" class="btn btn-default navbar-btn" id="control">Control</button>
-		<button type="button" class="btn btn-default navbar-btn" id="preview">Preview</button>
+		<button type="button" class="btn btn-default navbar-btn" id="preview" onclick="webcam(true)">Start
+			Preview</button>
+		<button type="button" class="btn btn-default navbar-btn" id="preview_stop" onclick="webcam(false)">Stop
+			Preview</button>
 		<button type="button" class="btn btn-default navbar-btn" id="media">Media</button>
-		<b id="camera_name">{{goproinfo}}</b>
+		<button type="button" class="btn btn-default navbar-btn" id="exit" onclick="fetch('/quit')">Exit</button>
+
+		<b id=" camera_name">{{goproinfo}}</b>
 		||
 		<b id="status">Not connected</b>
 		<input style="position: absolute; right: 0;width:20%" type="range" min="1" max="10" value="9"

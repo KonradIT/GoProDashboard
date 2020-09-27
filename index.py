@@ -48,6 +48,29 @@ def delete_media():
 	gopro.deleteFile(request.args.get('folder'),request.args.get('filename'))
 	return media()
 
+@app.route('/quit')
+def graceful_exit():
+    gopro.gpTurbo(constants.off)
+    gopro.power_off()
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return ("",200)
+
+@app.route("/webcam/start")
+def webcam_start():
+    gopro.gpTurbo(constants.off)
+    gopro.startWebcam()
+    gopro.getWebcamPreview()
+    return ("",200)
+
+@app.route("/webcam/stop")
+def webcam_stop():
+    gopro.stopWebcam()
+    gopro.gpTurbo(constants.on)
+    return ("",200)
+
 if __name__ == '__main__':
     signal(SIGINT, handler)
     gopro.gpTurbo(constants.on)
