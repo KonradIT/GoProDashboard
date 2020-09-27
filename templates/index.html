@@ -5,6 +5,7 @@
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="static/css/bootstrap.min.css"
 		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 	<style>
 		body {
 			background-color: black;
@@ -23,21 +24,60 @@
 			grid-template-columns: auto auto auto auto auto auto auto auto auto;
 			background-color: black;
 			padding: 30px;
+			grid-gap: 7px;
+
 		}
 
 		.grid-item {
-			background-color: rgba(255, 255, 255, 0.8);
+			background-color: black;
 			border: 1px solid rgba(0, 0, 0, 0.8);
 			text-align: center;
 		}
 	</style>
 	<script>
-		function display(src) {
-			document.getElementById("display_media").style.visibility = "visible";
-			document.getElementById("display_media").src = src;
+		window.onload = function () {
+			var slider = document.getElementsByClassName("rangeslider")[0];
+			slider.oninput = function () {
+				document.getElementById("mediadisplay").style.gridTemplateColumns = "auto ".repeat(this.value);
+			}
+			setInterval(function () {
+				fetch("/ping")
+					.then(function (response) {
+						return response.text().then(function (text) {
+							console.log(text)
+							if (text == "ok") {
+								document.getElementById("status").innerHTML = "Connected"
+								document.getElementById("status").style.color = "#00FA00"
+							} else {
+								document.getElementById("status").innerHTML = "Not connected"
+								document.getElementById("status").style.color = "#FF0000"
+							}
+						})
+					}).catch(function (_) {
+						document.getElementById("status").innerHTML = "Not connected"
+						document.getElementById("status").style.color = "#FF0000"
+					})
+			}, 1000)
+		}
+
+		function download(folder, file) {
+			fetch("/download?folder=" + folder + "&filename=" + file).then(function (response) {
+				if (response.status == 200) {
+					alert("Downloaded: " + folder + "/" + file)
+				}
+			})
+		}
+
+		function deletefromcam(folder, file) {
+			fetch("/delete?folder=" + folder + "&filename=" + file).then(function (response) {
+				if (response.status == 200) {
+					location.reload()
+				}
+			})
 		}
 
 	</script>
+
 </head>
 
 <body>
@@ -47,25 +87,32 @@
 		<button type="button" class="btn btn-default navbar-btn" id="preview">Preview</button>
 		<button type="button" class="btn btn-default navbar-btn" id="media">Media</button>
 		<b id="camera_name">{{goproinfo}}</b>
+		||
+		<b id="status">Not connected</b>
+		<input style="position: absolute; right: 0;width:20%" type="range" min="1" max="10" value="9"
+			class="rangeslider">
 	</nav>
 
 	<button type="button" class="btn btn-primary">Shutter</button>
-	<div class="grid-container">
-		{% for result in searchResults %}
+	<div id="mediadisplay" class="grid-container">
+		{% for result in media %}
 		<div class="grid-item">
-			<img src="http://172.28.151.51/gp/gpMediaMetadata?p={{result[0]}}/{{result[1]}}" />
+			<img style="width: 100%; height: auto; border-radius: 10px;" cover
+				src="http://{{ip_address}}/gp/gpMediaMetadata?p={{result[0]}}/{{result[1]}}" />
 			<br>
-			<b>{{result[0]}}</b>
+			<b id="title">{{result[0]}}</b>
 			<br>
-			<b>{{result[1]}}</b>
-			<br><a href="http://10.5.5.9:8080/videos/DCIM/{{result[0]}}/{{result[1]}}">Download</a> | <a
-				onclick="display('http://10.5.5.9:8080/videos/DCIM/{{result[0]}}/{{result[1]}}')">Display</a>
+			<b id="title">{{result[1]}}</b>
+			<br><a style="color:white;" href="http://{{ip_address}}/videos/DCIM/{{result[0]}}/{{result[1]}}"><i
+					class="material-icons md-dark">preview</i></a>
+			<i style="cursor: pointer;" onclick="download('{{result[0]}}', '{{result[1]}}')"
+				class="material-icons md-dark">cloud_download</i>
+			<i style="cursor: pointer;" onclick="deletefromcam('{{result[0]}}', '{{result[1]}}')"
+				class="material-icons md-dark">delete</i>
 		</div>
 
 		{% endfor %}
-
 	</div>
-	<iframe width="50%" height="60%" id="display_media">
 </body>
 
 </html>
