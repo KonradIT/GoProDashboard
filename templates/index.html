@@ -117,6 +117,8 @@
 			<b id="title">{{result[1]}}</b>
 			<br><a style="color:white;" href="http://{{ip_address}}/videos/DCIM/{{result[0]}}/{{result[1]}}"><i
 					class="material-icons md-dark">preview</i></a>
+			<a style="color:white;" href='http://{{ip_address}}/videos/DCIM/{{result[0] | replace("GH","GL") }}/{{result[1] | replace(".MP4",".LRV")}}'><i
+						class="material-icons md-dark">preview</i></a>
 			<i style="cursor: pointer;" onclick="download('{{result[0]}}', '{{result[1]}}')"
 				class="material-icons md-dark">cloud_download</i>
 			<i style="cursor: pointer;" onclick="deletefromcam('{{result[0]}}', '{{result[1]}}')"

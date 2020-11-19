@@ -27,7 +27,8 @@ python main.py
 
 .env.example provides default values, code will look for .env
 
-
 ### Running GoPro Dashboard automatically when the camera is plugged in
 
 Copy `00-gopro-dashboard` to `/etc/NetworkManager/dispatcher.d`, make the necessary changes to detect the GoPro USB Ethernet interface as well as the path to this repository.
+
+Also, create a file called gopro.dashboard with `enabled` or `disabled` in it to enable/disable starting this program when the camera is plugged in.

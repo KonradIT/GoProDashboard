@@ -6,15 +6,17 @@ STATUS=$2
 case "$IF" in 
   *enp0s20*)
     # Do stuff
-
+	  if [[ $(cat /home/konrad/gopro.dashboard) == "disabled" ]]; then exit; fi
     case "$STATUS" in
         up)
 
         	DISPLAY=:0 /usr/bin/notify-send "GoPro Webcam Activated" $(ifconfig $IF | grep "inet " | awk '{print $2}')
-        	/usr/bin/python /home/konrad/GitHub/GoproDashboard/index.py
+        	INTERFACE=$IF MEDIA_DOWNLOAD_DIR="/home/konrad/Desktop/temp" /usr/bin/python /home/konrad/GitHub/GoproDashboard/index.py &
+			    echo $! > /home/konrad/gopro.pid
         ;;
         down)
         	DISPLAY=:0 /usr/bin/notify-send "GoPro Webcam Deactivated"
+        	kill -9 $(cat /home/konrad/gopro.pid)
         ;;
         *)
         ;;
